@@ -1,0 +1,17 @@
+{
+  "name": "frain",
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm -r build",
+    "format": "pnpm -r format",
+    "lint": "pnpm -r lint"
+  },
+  "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-solid": "^0.13.2",
+    "prettier": "^3.2.5"
+  }
+}
