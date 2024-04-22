@@ -1,12 +1,7 @@
-import { Title } from '@solidjs/meta'
-import Counter from '~/components/counter'
+import { Navigate } from "@solidjs/router";
 
 export default function Home() {
   return (
-    <main>
-      <Title>Hello World</Title>
-      <h1>Hello world!</h1>
-      <Counter />
-    </main>
+    <Navigate href="/forms" />
   )
 }
