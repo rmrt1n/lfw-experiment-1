@@ -1,16 +1,17 @@
 import { Title } from "@solidjs/meta";
 import { Suspense } from "solid-js";
+import { Button } from '~/components/button'
 
 export default function RootLayout(props) {
   return (
     <>
       <Title>Rofobi</Title>
-      <header className="border-b h-10">
+      <header className="border-b h-12">
         <nav className="max-w-5xl mx-auto flex items-center justify-between gap-2 p-2">
           <a href="/">Rofobi</a>
-          <div className="space-x-2">
+          <div className="flex items-center gap-2">
             <button>GitHub</button>
-            <button>Sign in</button>
+            <Button variant="primary">Sign in</Button>
           </div>
         </nav>
       </header>
