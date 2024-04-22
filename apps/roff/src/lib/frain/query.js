@@ -1,29 +1,3 @@
-export function createTransactor(db, setDb, ns) {
-  return {
-    insert: (kvs) => setDb(batchUpdate(db(), ns, id(), kvs)),
-    update: (id, kvs) => setDb(batchUpdate(db(), ns, id, kvs)),
-  }
-}
-
-function batchUpdate(db, ns, id, kvs) {
-  return Object.keys(kvs).reduce((acc, k) => update(acc, id, `${ns}/${k}`, kvs[k], true), db)
-}
-
-function update(db, e, a, v, op) {
-  const nextTx = db.maxTx + 1
-  return {
-    ...db,
-    eavt: { ...db.eavt, [e]: { ...db.eavt[e], [a]: v } },
-    aevt: { ...db.aevt, [a]: { ...db.aevt[a], [e]: v } },
-    maxTx: nextTx,
-    storage: { ...db.storage, [e]: { ...db.storage[e], [a]: { value: v, tx: nextTx, op } } }
-  }
-}
-
-export function id() {
-  return crypto.randomUUID()
-}
-
 export function createQueryClient(db) {
   return {
     find: (finds) => createWhereClause(db, finds)
@@ -35,7 +9,6 @@ function createWhereClause(db, finds) {
     where: (wheres) => query(db(), finds, wheres)
   }
 }
-
 
 function query(db, finds, wheres) {
   const ctxs = queryMany(db, wheres)
@@ -50,7 +23,6 @@ function queryMany(db, patterns) {
   }, [{}])
 }
 
-// fix broken if db is empty
 function querySingle(db, pattern, ctx) {
   const [e, a, _] = pattern
   if (Object.keys(db.eavt).length === 0) return []

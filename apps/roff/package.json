@@ -9,6 +9,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@solid-primitives/storage": "^3.3.0",
     "@solidjs/meta": "^0.29.3",
     "@solidjs/router": "^0.13.2",
     "@solidjs/start": "^1.0.0-rc.0",

@@ -1,5 +1,8 @@
-import { createContext, createEffect, createSignal, useContext } from 'solid-js'
-import { createTransactor, createQueryClient } from './frain'
+import { createContext, createSignal, useContext } from 'solid-js'
+import { makePersisted } from '@solid-primitives/storage'
+import { createTransactor } from '~/lib/frain/db'
+import { createQueryClient } from '~/lib/frain/query'
+import { serializeStorage, buildIndexes } from '~/lib/frain/store'
 
 const STORAGE_KEY = 'frain'
 const initialState = {
@@ -12,19 +15,13 @@ const initialState = {
   maxTx: 0
 }
 
-function initDb() {
-  const data = localStorage.getItem(STORAGE_KEY)
-  if (data) return JSON.parse(data)
-  return initialState
-}
-
 const FrainContext = createContext(initialState)
 
 export function FrainProvider(props) {
-  const [db, setDb] = createSignal(initDb())
-
-  createEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(db()))
+  const [db, setDb] = makePersisted(createSignal(initialState), {
+    name: STORAGE_KEY,
+    serialize: (db) => serializeStorage(db),
+    deserialize: (s) => buildIndexes(s)
   })
 
   const value = {
