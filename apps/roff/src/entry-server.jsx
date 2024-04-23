@@ -14,7 +14,7 @@ export default createHandler(() => (
           <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400..800&display=swap" rel="stylesheet" />
           {assets}
         </head>
-        <body>
+        <body class="bg-neutral-100">
           <div id="app">{children}</div>
           {scripts}
         </body>

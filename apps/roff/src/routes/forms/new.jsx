@@ -1,4 +1,3 @@
-import { createEffect } from "solid-js"
 import { Button } from "~/components/button"
 import { Input } from "~/components/input"
 import { Card } from "~/components/card"
@@ -21,7 +20,7 @@ export default function FormsNew() {
         </div>
         <div class="space-x-2">
           <Button onClick={handleSaveDraft}>Preview</Button>
-          <Button>Publish</Button>
+          <Button variant="primary">Publish</Button>
         </div>
       </div>
       <div>

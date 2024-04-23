@@ -2,8 +2,8 @@ import { useNavigate } from "@solidjs/router"
 import { useFrain } from '~/lib/frain-provider'
 import { Button, button } from "~/components/button"
 import { Plus } from "~/components/icons"
-import { Card } from '~/components/card'
 import { createSignal, onMount } from "solid-js"
+import { Card } from "~/components/card"
 
 export default function Forms() {
   const db = useFrain()
@@ -39,15 +39,20 @@ export default function Forms() {
         </Button>
       </div>
       <div class="flex flex-col gap-3">
-        <For each={forms()}>
-          {(form) => (
-            <Card class="flex items-center gap-4">
-              <p>{form.id}</p>
-              <p>{form.name}</p>
-              <p>{form.isDraft ? 'draft' : 'published'}</p>
-            </Card>
-          )}
-        </For>
+        <ul class="space-y-1">
+          <For each={forms()}>
+            {(form) => (
+              <li>
+                <a href={`/forms/${form.id}`} class="cursor-default">
+                  <Card class="flex items-center gap-4 py-2  hover:border-neutral-400">
+                    <p>{form.name}</p>
+                    <p>{form.isDraft ? 'draft' : 'published'}</p>
+                  </Card>
+                </a>
+              </li>
+            )}
+          </For>
+        </ul>
       </div>
     </div>
   )
