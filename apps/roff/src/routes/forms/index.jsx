@@ -1,26 +1,51 @@
-import { Button } from "~/components/button"
-
-const forms = [
-  { id: 1, name: "survey 1" },
-  { id: 2, name: "survey 2" },
-]
+import { useNavigate } from "@solidjs/router"
+import { useFrain } from '~/lib/frain-provider'
+import { Button, button } from "~/components/button"
+import { Plus } from "~/components/icons"
+import { Card } from '~/components/card'
+import { createSignal, onMount } from "solid-js"
 
 export default function Forms() {
+  const db = useFrain()
+  const navigate = useNavigate()
+
+  const [forms, setForms] = createSignal([])
+  onMount(() => {
+    setForms(db.q()
+      .find(['?e', '?name', '?isDraft'])
+      .where([
+        ['?e', 'forms/name', '?name'],
+        ['?e', 'forms/isDraft', '?isDraft']
+      ])
+      .map(([id, name, isDraft]) => ({ id, name, isDraft })))
+  })
+
+  const createNewDraft = () => {
+    db.from('forms').insert({
+      name: 'Untitled form',
+      isDraft: true,
+    })
+    // I just prefer to use relative paths from the root, not the current path
+    navigate('/forms/new', { resolve: false })
+  }
+
   return (
-    <div>
+    <div class="space-y-4">
       <div class="flex items-center justify-between">
         <h1 class="text-lg font-extrabold">My forms</h1>
-        <a href="/forms/new">New form</a>
+        <Button class={button({ variant: 'primary' })} onClick={createNewDraft}>
+          <Plus strokeWidth={2} />
+          New form
+        </Button>
       </div>
-      <div class="flex gap-2">
-        <For each={forms}>
+      <div class="flex flex-col gap-3">
+        <For each={forms()}>
           {(form) => (
-            <div class="border p-2">
+            <Card class="flex items-center gap-4">
               <p>{form.id}</p>
               <p>{form.name}</p>
-              <a>Edit form</a>
-              <Button>test</Button>
-            </div>
+              <p>{form.isDraft ? 'draft' : 'published'}</p>
+            </Card>
           )}
         </For>
       </div>

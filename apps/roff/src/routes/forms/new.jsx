@@ -1,25 +1,23 @@
 import { createEffect } from "solid-js"
 import { Button } from "~/components/button"
+import { Input } from "~/components/input"
+import { Card } from "~/components/card"
 import { useFrain } from "~/lib/frain-provider"
 
 export default function FormsNew() {
   const db = useFrain()
-
-  createEffect(() => {
-    console.log(db.q().find(['?v']).where([['?id', 'forms/name', '?v']]))
-  })
 
   const handleSaveDraft = () => {
     db.from('forms').insert({ name: 'Test form 1' })
   }
 
   return (
-    <div class="space-y-2">
-      <Button variant="primary">Focus on me</Button>
+    <div class="space-y-4">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <a href="/forms">Back</a>
-          <h1 class="text-lg font-extrabold">New form</h1>
+          <a href="/forms" class="font-bold text-blue-700 hover:underline">🡨 My forms</a>
+          <span>/</span>
+          <Input value="Untitled form" placeholder="Form name" />
         </div>
         <div class="space-x-2">
           <Button onClick={handleSaveDraft}>Preview</Button>
@@ -27,9 +25,9 @@ export default function FormsNew() {
         </div>
       </div>
       <div>
-        <div class="bg-white p-2 border rounded">
+        <Card class="thefuck">
           <h2>Welcome card</h2>
-        </div>
+        </Card>
       </div>
     </div>
   )

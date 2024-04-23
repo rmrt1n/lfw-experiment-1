@@ -1,5 +1,4 @@
 import { Title } from "@solidjs/meta";
-import { Suspense } from "solid-js";
 import { Button } from '~/components/button'
 
 export default function RootLayout(props) {
@@ -15,19 +14,9 @@ export default function RootLayout(props) {
           </div>
         </nav>
       </header>
-      <main class="max-w-5xl mx-auto p-2">
-        <Suspense fallback={Loading}>
-          {props.children}
-        </Suspense>
+      <main class="max-w-5xl mx-auto p-2 pt-10">
+        {props.children}
       </main>
     </>
   )
 }
-
-function Loading() {
-  return (
-    <>
-      Initializing app...
-    </>
-  )
-} 
