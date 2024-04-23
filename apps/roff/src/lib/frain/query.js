@@ -30,13 +30,13 @@ function querySingle(db, pattern, ctx) {
     return Object.keys(db.eavt[e]).map((a) => {
       const triple = [e, a, db.eavt[e][a]]
       return matchPattern(pattern, triple, ctx)
-    })
+    }).filter((x) => x)
   }
   if (!isVariable(a)) {
     return Object.keys(db.aevt[a]).map((e) => {
       const triple = [e, a, db.aevt[a][e]]
       return matchPattern(pattern, triple, ctx)
-    })
+    }).filter((x) => x)
   }
   // later handle avet & vaet
   return Object.keys(db.eavt).reduce((acc, e) => {
@@ -44,7 +44,7 @@ function querySingle(db, pattern, ctx) {
       const triple = [e, a, db.eavt[e][a]]
       return matchPattern(pattern, triple, ctx)
     })]
-  }, [])
+  }, []).filter((x) => x)
 }
 
 function matchPattern(pattern, triple, ctx) {
