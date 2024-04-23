@@ -6,10 +6,10 @@ import { createSignal, onMount } from "solid-js"
 import { Card } from "~/components/card"
 
 export default function Forms() {
-  const db = useFrain()
   const navigate = useNavigate()
-
   const [forms, setForms] = createSignal([])
+  const db = useFrain()
+
   onMount(() => {
     setForms(db.q()
       .find(['?e', '?name', '?isDraft'])
