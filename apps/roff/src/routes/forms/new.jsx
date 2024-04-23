@@ -14,20 +14,21 @@ export default function FormsNew() {
   }
 
   return (
-    <div>
+    <div class="space-y-2">
+      <Button variant="primary">Focus on me</Button>
       <div class="flex items-center justify-between">
-        <div class="flex gap-2">
+        <div class="flex items-center gap-2">
           <a href="/forms">Back</a>
           <h1 class="text-lg font-extrabold">New form</h1>
         </div>
         <div class="space-x-2">
-          <Button onClick={handleSaveDraft}>Save draft</Button>
+          <Button onClick={handleSaveDraft}>Preview</Button>
           <Button>Publish</Button>
         </div>
       </div>
       <div>
-        <div class="whitespace-pre-wrap">
-          {JSON.stringify(db.db(), null, 2)}
+        <div class="bg-white p-2 border rounded">
+          <h2>Welcome card</h2>
         </div>
       </div>
     </div>

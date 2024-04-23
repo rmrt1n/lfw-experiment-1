@@ -1,21 +1,40 @@
 import { splitProps } from 'solid-js'
+import { cx, cva } from '~/lib/utils'
 
-const baseStyles = 'inline-flex items-center justify-center gap-2 h-8 px-2 py-1 border border-neutral-300 rounded whitespace-nowrap font-medium bg-neutral-50 text-neutral-900 shadow-[0_1px_0_0_#d4d4d8]'
-const hoverFocusStyles = 'hover:border-neutral-400 hover:bg-neutral-100 focus:border-neutral-400 focus:bg-neutral-100'
-const activeStyles = 'active:shadow-none active:shadow-[inset_0_1.5px_0_0_#d4d4d8] active:border-neutral-300'
-const focusVisibleNotActiveStyles = 'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-600'
-
-const tw = [baseStyles, hoverFocusStyles, activeStyles, focusVisibleNotActiveStyles]
-
-const variantStyles = {
-  primary: 'bg-blue-700 text-white border-blue-700 hover:bg-blue-800 hover:border-blue-900 focus:bg-blue-800 focus:border-blue-900 active:shadow-[inset_0_1.5px_0_0_rgb(0,0,0,0.3)] active:border-blue-700'
-}
+const buttonVariants = cva(
+  {
+    base: [
+      'inline-flex items-center justify-center gap-2 flex-shrink-0',
+      'h-8 px-2.5 py-0.5 border rounded-md ring-offset-1',
+      'font-medium text-center no-underline align-center whitespace-nowrap leading-tight',
+      '[&:not(:active)]:shadow-sm active:shadow-[inset_0_1px_2px_0_rgba(0,0,0,0.06);]',
+      'cursor-default'
+    ],
+    variants: {
+      variant: {
+        default: [
+          'bg-gradient-to-b from-neutral-50 to-neutral-100 border-neutral-300 text-neutral-800',
+          'hover:border-neutral-400',
+          'active:from-neutral-100 active:to-neutral-100 active:border-neutral-300'
+        ],
+        primary: [
+          'bg-gradient-to-b from-indigo-500 to-indigo-600 border-indigo-600 text-neutral-100',
+          'hover:from-indigo-500/95 hover:to-indigo-600/95 hover:border-indigo-800',
+          'active:from-indigo-600 active:to-indigo-600/95 active:border-indigo-600'
+        ],
+      },
+    },
+    defaultVariants: {
+      variant: 'default',
+    },
+  }
+)
 
 export function Button(props) {
-  const [classProps, variant, rest] = splitProps(props, ['class'], ['variant'])
+  const [classAndVariant, rest] = splitProps(props, ['class', 'variant'])
   return (
     <button
-      class={[...tw, variantStyles[variant.variant], classProps.class].join(' ')}
+      class={cx(buttonVariants(classAndVariant))}
       {...rest} />
   )
 }

@@ -13,7 +13,9 @@
     "@solidjs/meta": "^0.29.3",
     "@solidjs/router": "^0.13.2",
     "@solidjs/start": "^1.0.0-rc.0",
+    "cva": "1.0.0-beta.1",
     "solid-js": "^1.8.16",
+    "tailwind-merge": "^2.3.0",
     "vinxi": "^0.3.11"
   },
   "engines": {

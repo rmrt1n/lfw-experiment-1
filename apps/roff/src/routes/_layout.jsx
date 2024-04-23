@@ -10,7 +10,7 @@ export default function RootLayout(props) {
         <nav className="max-w-5xl mx-auto flex items-center justify-between gap-2 p-2">
           <a href="/">Rofobi</a>
           <div className="flex items-center gap-2">
-            <button>GitHub</button>
+            <a href="https://github.com">GitHub</a>
             <Button variant="primary">Sign in</Button>
           </div>
         </nav>
