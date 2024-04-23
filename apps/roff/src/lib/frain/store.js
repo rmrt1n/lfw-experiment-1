@@ -19,7 +19,12 @@ export function buildIndexes(s) {
           [e]: storage[e][a].value
         }
       }))
-    )).reduce((acc, cur) => ({ ...acc, ...cur }), {}),
+    )).reduce((acc, cur) => (
+      Object.keys(cur).reduce((acc, a) => ({
+        ...acc,
+        [a]: { ...acc[a], ...cur[a] }
+      }), acc)
+    ), {}),
     storage,
     maxTx,
   }
