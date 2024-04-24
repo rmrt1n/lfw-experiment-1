@@ -1,5 +1,8 @@
 import { defineWebSocket, eventHandler } from "vinxi/http";
 
+// TODO: persist this on disk
+const cids = []
+
 export default eventHandler({
   handler: () => { },
   websocket: defineWebSocket({
@@ -7,8 +10,16 @@ export default eventHandler({
       console.log(`[ws] open: ${peer}`);
     },
     async message(peer, message) {
-      if (message.text().includes("ping")) {
-        peer.send("pong");
+      const { action, body } = JSON.parse(message.text())
+      switch (action) {
+        case 'register':
+          if (!cids.includes(body.cid)) {
+            cids.push(body.cid)
+          }
+          peer.send(JSON.stringify({ ok: true, message: 'cid registered' }))
+          break
+        default:
+          peer.send(JSON.stringify({ ok: false, message: 'unknown action' }))
       }
     },
     async close(peer, event) {

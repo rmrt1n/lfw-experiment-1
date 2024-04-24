@@ -1,10 +1,10 @@
 // localstorage adapters
 export function serializeStorage(db) {
-  return JSON.stringify({ storage: db.storage, maxTx: db.maxTx })
+  return JSON.stringify({ storage: db.storage, maxTx: db.maxTx, cid: db.cid })
 }
 
 export function buildIndexes(s) {
-  const { storage, maxTx } = JSON.parse(s)
+  const { storage, maxTx, cid } = JSON.parse(s)
   return {
     eavt: Object.keys(storage).reduce((accE, e) => ({
       ...accE,
@@ -27,5 +27,6 @@ export function buildIndexes(s) {
     ), {}),
     storage,
     maxTx,
+    cid,
   }
 }
