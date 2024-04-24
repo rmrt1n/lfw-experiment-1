@@ -3,7 +3,8 @@ import { createSignal, createEffect } from "solid-js"
 import { useFrain } from '~/lib/frain-provider'
 import { Button, button } from "~/components/button"
 import { Input } from "~/components/input"
-import { Card } from "~/components/card"
+import { FormCover } from "~/components/form-cover"
+import { Plus } from "~/components/icons"
 
 export default function Form() {
   const { formId } = useParams()
@@ -11,15 +12,18 @@ export default function Form() {
   const db = useFrain()
 
   // TODO: this is probably a better api: db.from('forms').select().where({id: formId})
+  // TODO: handle 404 if form is undefined
   createEffect(() => {
     setForm(
       db.q()
-        .find(['?name', '?status'])
+        .find(['?name', '?status', '?title', '?desc'])
         .where([
           [formId, 'forms/name', '?name'],
-          [formId, 'forms/status', '?status']
+          [formId, 'forms/status', '?status'],
+          [formId, 'forms/title', '?title'],
+          [formId, 'forms/desc', '?desc'],
         ])
-        .map(([name, status]) => ({ id: formId, name, status }))[0]
+        .map(([name, status, title, desc]) => ({ id: formId, name, status, title, desc }))[0]
     )
   })
 
@@ -31,11 +35,13 @@ export default function Form() {
 
   return (
     <div class="space-y-4">
-      <div class="flex items-center justify-between">
+      <div class="flex items-center justify-between gap-2 flex-wrap">
         <div class="flex items-center gap-2">
-          <a href="/forms" class="font-bold text-blue-700 hover:underline">🡨 My forms</a>
+          <a href="/forms" class="font-bold text-blue-700 flex-shrink-0 hover:underline">
+            🡨 My forms
+          </a>
           <span>/</span>
-          <Input value={form().name} placeholder="Form name" />
+          <Input value={form().name} placeholder="Form name..." class="max-w-min" />
         </div>
         <div class="space-x-2">
           <Switch>
@@ -51,10 +57,12 @@ export default function Form() {
           </Switch>
         </div>
       </div>
-      <div>
-        <Card>
-          <h2>Welcome card</h2>
-        </Card>
+      <div class="space-y-4">
+        <FormCover form={form} />
+        <Button>
+          <Plus />
+          New question
+        </Button>
       </div>
     </div>
   )

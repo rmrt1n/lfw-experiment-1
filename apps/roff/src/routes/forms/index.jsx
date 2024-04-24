@@ -20,9 +20,11 @@ export default function Forms() {
       .map(([id, name, status]) => ({ id, name, status })))
   })
 
-  const createNewDraft = () => {
+  const handleNewDraft = () => {
     const id = db.from('forms').insert({
       name: 'Untitled form',
+      title: 'Untitle form',
+      desc: '',
       status: 'draft',
     })
     // I just prefer to use relative paths from the root, not the current path
@@ -33,7 +35,7 @@ export default function Forms() {
     <div class="space-y-4">
       <div class="flex items-center justify-between">
         <h1 class="text-lg font-extrabold">My forms</h1>
-        <Button class={button({ variant: 'primary' })} onClick={createNewDraft}>
+        <Button class={button({ variant: 'primary' })} onClick={handleNewDraft}>
           <Plus strokeWidth={2} />
           New form
         </Button>
