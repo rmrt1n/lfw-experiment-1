@@ -3,19 +3,21 @@ import { createSignal, createEffect } from "solid-js"
 import { useFrain } from '~/lib/frain-provider'
 
 export default function FormPublic() {
-  const params = useParams()
+  const { formId } = useParams()
   const [form, setForm] = createSignal({})
   const db = useFrain()
 
   createEffect(() => {
     setForm(
       db.q()
-        .find(['?name', '?status'])
+        .find(['?name', '?status', '?title', '?desc'])
         .where([
-          [params.formId, 'forms/name', '?name'],
-          [params.formId, 'forms/status', '?status']
+          [formId, 'forms/name', '?name'],
+          [formId, 'forms/status', '?status'],
+          [formId, 'forms/title', '?title'],
+          [formId, 'forms/desc', '?desc'],
         ])
-        .map(([name, status]) => ({ id: params.formId, name, status }))[0]
+        .map(([name, status, title, desc]) => ({ id: formId, name, status, title, desc }))[0]
     )
   })
 
@@ -26,7 +28,8 @@ export default function FormPublic() {
           <h1>This form doesn't exist</h1>
         </Match>
         <Match when={form().status === 'published'}>
-          <h1>{form().name}</h1>
+          <h1 class="text-lg font-extrabold">{form().title}</h1>
+          <p>{form().desc}</p>
         </Match>
       </Switch>
     </div>
