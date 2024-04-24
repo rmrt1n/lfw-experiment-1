@@ -2,7 +2,7 @@ import { useNavigate } from "@solidjs/router"
 import { useFrain } from '~/lib/frain-provider'
 import { Button, button } from "~/components/button"
 import { Plus } from "~/components/icons"
-import { createSignal, onMount } from "solid-js"
+import { createSignal, createEffect } from "solid-js"
 import { Card } from "~/components/card"
 
 export default function Forms() {
@@ -10,14 +10,8 @@ export default function Forms() {
   const [forms, setForms] = createSignal([])
   const db = useFrain()
 
-  onMount(() => {
-    setForms(db.q()
-      .find(['?e', '?name', '?status'])
-      .where([
-        ['?e', 'forms/name', '?name'],
-        ['?e', 'forms/status', '?status']
-      ])
-      .map(([id, name, status]) => ({ id, name, status })))
+  createEffect(() => {
+    setForms(db.from('forms').findAll())
   })
 
   const handleNewDraft = () => {

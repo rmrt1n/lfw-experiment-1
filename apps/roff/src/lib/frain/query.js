@@ -10,8 +10,9 @@ function createWhereClause(db, finds) {
   }
 }
 
-function query(db, finds, wheres) {
+export function query(db, finds, wheres) {
   const ctxs = queryMany(db, wheres)
+  if (finds.length === 0) return ctxs
   return ctxs.map((ctx) => {
     return finds.map((part) => isVariable(part) ? ctx[part] : part)
   })

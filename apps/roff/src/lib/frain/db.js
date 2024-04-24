@@ -1,7 +1,17 @@
 import { id } from './utils'
+import { query } from './query'
 
 export function createTransactor(db, setDb, ns) {
   return {
+    find: (id) => {
+      return query(db(), ['?a', '?v'], [[id, '?a', '?v']])
+        .reduce((acc, [a, v]) => ({ ...acc, [a.split('/')[1]]: v }), { id })
+    },
+    findAll: () => {
+      const res = query(db(), ['?e', '?a', '?v'], [['?e', '?a', '?v']])
+        .reduce((acc, [e, a, v]) => ({ ...acc, [e]: { ...acc[e], [a.split('/')[1]]: v } }), {})
+      return Object.keys(res).map((e) => ({ id: e, ...res[e] }))
+    },
     insert: (kvs) => {
       const newId = id()
       setDb(batchUpdate(db(), ns, newId, kvs))

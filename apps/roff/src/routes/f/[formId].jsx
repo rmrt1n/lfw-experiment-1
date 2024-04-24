@@ -8,17 +8,7 @@ export default function FormPublic() {
   const db = useFrain()
 
   createEffect(() => {
-    setForm(
-      db.q()
-        .find(['?name', '?status', '?title', '?desc'])
-        .where([
-          [formId, 'forms/name', '?name'],
-          [formId, 'forms/status', '?status'],
-          [formId, 'forms/title', '?title'],
-          [formId, 'forms/desc', '?desc'],
-        ])
-        .map(([name, status, title, desc]) => ({ id: formId, name, status, title, desc }))[0]
-    )
+    setForm(db.from('forms').find(formId))
   })
 
   return (

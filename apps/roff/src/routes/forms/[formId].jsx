@@ -11,20 +11,9 @@ export default function Form() {
   const [form, setForm] = createSignal({})
   const db = useFrain()
 
-  // TODO: this is probably a better api: db.from('forms').select().where({id: formId})
   // TODO: handle 404 if form is undefined
   createEffect(() => {
-    setForm(
-      db.q()
-        .find(['?name', '?status', '?title', '?desc'])
-        .where([
-          [formId, 'forms/name', '?name'],
-          [formId, 'forms/status', '?status'],
-          [formId, 'forms/title', '?title'],
-          [formId, 'forms/desc', '?desc'],
-        ])
-        .map(([name, status, title, desc]) => ({ id: formId, name, status, title, desc }))[0]
-    )
+    setForm(db.from('forms').find(formId))
   })
 
   const handlePublish = () => {
