@@ -12,21 +12,21 @@ export default function Forms() {
 
   onMount(() => {
     setForms(db.q()
-      .find(['?e', '?name', '?isDraft'])
+      .find(['?e', '?name', '?status'])
       .where([
         ['?e', 'forms/name', '?name'],
-        ['?e', 'forms/isDraft', '?isDraft']
+        ['?e', 'forms/status', '?status']
       ])
-      .map(([id, name, isDraft]) => ({ id, name, isDraft })))
+      .map(([id, name, status]) => ({ id, name, status })))
   })
 
   const createNewDraft = () => {
-    db.from('forms').insert({
+    const id = db.from('forms').insert({
       name: 'Untitled form',
-      isDraft: true,
+      status: 'draft',
     })
     // I just prefer to use relative paths from the root, not the current path
-    navigate('/forms/new', { resolve: false })
+    navigate(`/forms/${id}`, { resolve: false })
   }
 
   return (
@@ -40,20 +40,30 @@ export default function Forms() {
       </div>
       <div class="flex flex-col gap-3">
         <ul class="space-y-1">
-          <For each={forms()}>
-            {(form) => (
-              <li>
-                <a href={`/forms/${form.id}`} class="cursor-default">
-                  <Card class="flex items-center gap-4 py-2  hover:border-neutral-400">
-                    <p>{form.name}</p>
-                    <p>{form.isDraft ? 'draft' : 'published'}</p>
-                  </Card>
-                </a>
-              </li>
-            )}
-          </For>
+          <Show when={forms() && forms().length > 0} fallback={EmptyState}>
+            <For each={forms()}>
+              {(form) => (
+                <li>
+                  <a href={`/forms/${form.id}`} class="cursor-default">
+                    <Card class="flex items-center gap-4 py-2  hover:border-neutral-400">
+                      <p>{form.name}</p>
+                      <p>{form.status}</p>
+                    </Card>
+                  </a>
+                </li>
+              )}
+            </For>
+          </Show>
         </ul>
       </div>
     </div>
+  )
+}
+
+function EmptyState() {
+  return (
+    <>
+      <h2>You have no forms</h2>
+    </>
   )
 }
