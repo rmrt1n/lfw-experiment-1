@@ -2,7 +2,11 @@ import { id } from './utils'
 
 export function createTransactor(db, setDb, ns) {
   return {
-    insert: (kvs) => setDb(batchUpdate(db(), ns, id(), kvs)),
+    insert: (kvs) => {
+      const newId = id()
+      setDb(batchUpdate(db(), ns, newId, kvs))
+      return newId
+    },
     update: (id, kvs) => setDb(batchUpdate(db(), ns, id, kvs)),
     // delete
   }
