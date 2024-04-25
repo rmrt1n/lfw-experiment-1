@@ -1,0 +1,15 @@
+syntax = "proto3";
+package frainrollup.frainrollup;
+
+import "amino/amino.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "frain-rollup/x/frainrollup/types";
+
+// Params defines the parameters for the module.
+message Params {
+  option (amino.name) = "frainrollup/x/frainrollup/Params";
+  option (gogoproto.equal) = true;
+
+  
+}
