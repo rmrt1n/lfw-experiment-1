@@ -1,0 +1,12 @@
+{
+  "name": "frain-rollup",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "./init-local.sh",
+    "build": "",
+    "start": "",
+    "format": "",
+    "lint": "",
+    "clean": "rm -rf ~/.frain-rollup && rm ~/go/bin/frain-rollupd"
+  }
+}
