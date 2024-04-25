@@ -10,11 +10,20 @@ export default eventHandler({
       console.log(`[ws] open: ${peer}`);
     },
     async message(peer, message) {
-      const { action, body } = JSON.parse(message.text())
-      switch (action) {
+      let data;
+      try {
+        data = JSON.parse(message.text())
+      } catch (error) {
+        peer.send(JSON.stringify({ ok: false, message: 'bad request' }))
+        return
+      }
+      if (!data.action) {
+        peer.send(JSON.stringify({ ok: false, message: 'bad request' }))
+      }
+      switch (data.action) {
         case 'register':
-          if (!cids.includes(body.cid)) {
-            cids.push(body.cid)
+          if (!cids.includes(data.body.cid)) {
+            cids.push(data.body.cid)
           }
           peer.send(JSON.stringify({ ok: true, message: 'cid registered' }))
           break
