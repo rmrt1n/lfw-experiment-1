@@ -25,23 +25,26 @@ export function FrainProvider(props) {
     serialize: (db) => serializeStorage(db),
     deserialize: (s) => buildIndexes(s)
   })
+  const [isOnline, setIsOnline] = createSignal(false)
   let ws;
 
   onMount(() => {
     // if client isn't initialized, assign cid
-    const cid = id()
+    const cid = 'alice'
     if (db().cid.length === 0) setDb({ ...db(), cid })
 
     const host = window.location.host
     ws = new WebSocket(`ws://${host}/_sync`)
     // register client
     ws.onopen = () => {
+      setIsOnline(true)
       ws.send(JSON.stringify({
         action: 'register',
         body: { cid: db().cid }
       }))
     }
     ws.onmessage = (event) => console.log(event.data)
+    ws.onclose = () => setIsOnline(false)
 
     // close ws conn
     onCleanup(() => ws.close())
@@ -49,6 +52,7 @@ export function FrainProvider(props) {
 
   const value = {
     db,
+    isOnline,
     from: (ns) => createTransactor(db, setDb, ns),
     q: () => createQueryClient(db)
   }
