@@ -30,7 +30,7 @@ export function FrainProvider(props) {
 
   onMount(() => {
     // if client isn't initialized, assign cid
-    const cid = 'alice'
+    const cid = id()
     if (db().cid.length === 0) setDb({ ...db(), cid })
 
     const host = window.location.host
@@ -66,6 +66,6 @@ export function FrainProvider(props) {
 
 export function useFrain() {
   const context = useContext(FrainContext)
-  if (context === undefined) throw new Error('useFrain must be used within a FrainProvider')
+  if (!context) throw new Error('useFrain must be used within a FrainProvider')
   return context
 }

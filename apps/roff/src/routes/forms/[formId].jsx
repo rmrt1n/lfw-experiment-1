@@ -16,6 +16,10 @@ export default function Form() {
     setForm(db.from('forms').find(formId))
   })
 
+  const handleUpdateName = (e) => {
+    db.from('forms').update(formId, { name: e.target.value })
+  }
+
   const handlePublish = () => {
     db.from('forms').update(formId, { status: 'published' })
     const fullPath = window.location.href.split('/forms')[0]
@@ -30,7 +34,7 @@ export default function Form() {
             🡨 My forms
           </a>
           <span>/</span>
-          <Input value={form().name} placeholder="Form name..." class="max-w-min" />
+          <Input value={form().name} onChange={handleUpdateName} placeholder="Form name..." class="max-w-min" />
         </div>
         <div class="space-x-2">
           <Switch>

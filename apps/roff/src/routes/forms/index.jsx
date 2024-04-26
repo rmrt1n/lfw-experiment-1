@@ -41,7 +41,7 @@ export default function Forms() {
               {(form) => (
                 <li>
                   <a href={`/forms/${form.id}`} class="cursor-default">
-                    <Card class="flex items-center gap-4 py-2  hover:border-neutral-400">
+                    <Card class="flex items-center gap-4 py-2  hover:bg-neutral-100">
                       <p>{form.name}</p>
                       <p>{form.status}</p>
                     </Card>
