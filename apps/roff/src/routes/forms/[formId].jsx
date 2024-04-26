@@ -1,10 +1,10 @@
 import { useParams } from "@solidjs/router"
 import { createSignal, createEffect } from "solid-js"
 import { useFrain } from '~/lib/frain-provider'
-import { Button, button } from "~/components/button"
-import { Input } from "~/components/input"
+import { Button, button } from "~/components/ui/button"
+import { Input } from "~/components/ui/input"
+import { Plus } from "~/components/ui/icons"
 import { FormCover } from "~/components/form-cover"
-import { Plus } from "~/components/icons"
 
 export default function Form() {
   const { formId } = useParams()

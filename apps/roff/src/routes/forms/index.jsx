@@ -1,9 +1,10 @@
 import { useNavigate } from "@solidjs/router"
-import { useFrain } from '~/lib/frain-provider'
-import { Button, button } from "~/components/button"
-import { Plus } from "~/components/icons"
 import { createSignal, createEffect } from "solid-js"
-import { Card } from "~/components/card"
+
+import { useFrain } from '~/lib/frain-provider'
+import { Button, button } from "~/components/ui/button"
+import { Plus } from "~/components/ui/icons"
+import { Card } from "~/components/ui/card"
 
 export default function Forms() {
   const navigate = useNavigate()

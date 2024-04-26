@@ -1,7 +1,7 @@
 import { Title } from "@solidjs/meta";
 import { Suspense } from "solid-js";
-import { Button, button } from '~/components/button'
-import { GitHub, Logo, Profile } from "~/components/icons";
+import { Button, button } from '~/components/ui/button'
+import { GitHub, Logo, Profile } from "~/components/ui/icons";
 import { useFrain } from "~/lib/frain-provider";
 import { cx } from "~/lib/utils";
 

@@ -1,5 +1,5 @@
 import { onMount, onCleanup } from "solid-js"
-import { Button } from "~/components/button"
+import { Button } from "~/components/ui/button"
 
 export default function Home() {
   let ws;
@@ -18,7 +18,7 @@ export default function Home() {
   })
 
   const pong = () => {
-    ws.send('ping')
+    ws.send(JSON.stringify({ action: 'debug' }))
   }
 
   return (
