@@ -1,6 +1,6 @@
-import { Input } from "~/components/input"
-import { Textarea } from "~/components/textarea"
-import { Card } from "~/components/card"
+import { Input } from "~/components/ui/input"
+import { Textarea } from "~/components/ui/textarea"
+import { Card } from "~/components/ui/card"
 import { useFrain } from '~/lib/frain-provider'
 
 export function FormCover(props) {
