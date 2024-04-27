@@ -6,6 +6,7 @@ import { Input } from "~/components/ui/input"
 import { Plus } from "~/components/ui/icons"
 import { FormCover } from "~/components/form-cover"
 import { QuestionCard } from "~/components/question-card"
+import { sortByPrev } from '~/lib/utils'
 
 export default function Form() {
   const { formId } = useParams()
@@ -34,12 +35,8 @@ export default function Form() {
           ? { ...acc[id], options: [...acc[id].options, { id: oid, option }] }
           : { id, question, desc, type, required, prev, options: [{ id: oid, option }] }
       }), {})
-    setQuestions(Object.keys(res).map((id) => res[id]))
+    setQuestions(sortByPrev(res))
   })
-
-  const handleUpdateName = (e) => {
-    db.from('forms').update(formId, { name: e.target.value })
-  }
 
   const handlePublish = () => {
     db.from('forms').update(formId, { status: 'published' })
@@ -71,7 +68,12 @@ export default function Form() {
             🡨 My forms
           </a>
           <span>/</span>
-          <Input value={form().name} onChange={handleUpdateName} placeholder="Form name..." class="max-w-min" />
+          <Input
+            value={form().name}
+            onChange={(e) => db.from('forms').update(formId, { name: e.target.value })}
+            placeholder="Form name..."
+            class="max-w-min"
+          />
         </div>
         <div class="space-x-2">
           <Switch>
@@ -90,11 +92,8 @@ export default function Form() {
       <div class="space-y-4">
         <FormCover form={form} />
         <For each={questions()}>
-          {(q, i) => (
-            <QuestionCard
-              question={q}
-              next={questions()[i() + 1]}
-            />
+          {(q) => (
+            <QuestionCard question={q} />
           )}
         </For>
         <Button onClick={handleNewQuestion}>
