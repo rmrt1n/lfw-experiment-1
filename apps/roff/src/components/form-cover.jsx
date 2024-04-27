@@ -20,7 +20,6 @@ export function FormCover(props) {
         <label for="title">Title</label>
         <Input
           id="title"
-          name="title"
           value={props.form().title}
           placeholder="Your form title..."
           onChange={handleUpdateTitle}
@@ -30,7 +29,6 @@ export function FormCover(props) {
         <label for="desc">Description</label>
         <Textarea
           id="desc"
-          name="desc"
           value={props.form().desc}
           placeholder="About this form..."
           rows={5}
