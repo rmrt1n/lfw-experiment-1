@@ -8,7 +8,7 @@ export default function RootLayout(props) {
     <>
       <Title>Rofobi</Title>
       <Header />
-      <main class="max-w-5xl mx-auto p-2 pt-10">
+      <main class="max-w-5xl mx-auto p-2 py-10">
         <Suspense fallback={Loading}>
           {props.children}
         </Suspense>

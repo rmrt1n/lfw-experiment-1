@@ -92,7 +92,6 @@ export default function Form() {
         <For each={questions()}>
           {(q, i) => (
             <QuestionCard
-              i={i() + 1}
               question={q}
               next={questions()[i() + 1]}
             />
