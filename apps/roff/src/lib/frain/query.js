@@ -28,6 +28,7 @@ function querySingle(db, pattern, ctx) {
   const [e, a, _] = pattern
   if (Object.keys(db.eavt).length === 0) return []
   if (!isVariable(e)) {
+    if (!db.eavt[e]) return []
     return Object.keys(db.eavt[e]).map((a) => {
       const triple = [e, a, db.eavt[e][a]]
       return matchPattern(pattern, triple, ctx)
@@ -41,6 +42,7 @@ function querySingle(db, pattern, ctx) {
     }).filter((x) => x)
   }
   // later handle avet & vaet
+  if (!db.eavt[e]) return []
   return Object.keys(db.eavt).reduce((acc, e) => {
     return [...acc, ...Object.keys(db.eavt[e]).map((a) => {
       const triple = [e, a, db.eavt[e][a]]
