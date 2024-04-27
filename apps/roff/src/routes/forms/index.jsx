@@ -18,12 +18,18 @@ export default function Forms() {
   const handleNewDraft = () => {
     const id = db.from('forms').insert({
       name: 'Untitled form',
-      title: 'Untitle form',
+      title: 'Untitled form',
       desc: '',
       status: 'draft',
     })
     // I just prefer to use relative paths from the root, not the current path
     navigate(`/forms/${id}`, { resolve: false })
+  }
+
+  const handleDeleteQuestion = (e, id) => {
+    // stop navigting from parent a tag
+    e.preventDefault()
+    db.from('forms').delete(id)
   }
 
   return (
@@ -45,6 +51,7 @@ export default function Forms() {
                     <Card class="flex items-center gap-4 py-2  hover:bg-neutral-100">
                       <p>{form.name}</p>
                       <p>{form.status}</p>
+                      <Button onClick={(e) => handleDeleteQuestion(e, form.id)}>Delete</Button>
                     </Card>
                   </a>
                 </li>
