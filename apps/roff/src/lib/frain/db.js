@@ -23,7 +23,11 @@ export function createTransactor(db, setDb, ns) {
       return newId
     },
     update: (id, kvs) => setDb(batchUpdate(db(), ns, id, kvs)),
-    delete: (id) => setDb(batchDelete(db(), id))
+    // when u need to update multiple entities in 1 transaction to avoid reactivity issues
+    batchUpdate: (idkvs) => setDb(idkvs.reduce((acc, [id, kvs]) => batchUpdate(acc, ns, id, kvs), db())),
+    // ugly af but there is no good abstraction for combined multiple update & deletes yet
+    updateDelete: ([id, kvs], e) => setDb(batchDelete(batchUpdate(db(), ns, id, kvs), e)),
+    delete: (id) => setDb(batchDelete(db(), id)),
   }
 }
 
