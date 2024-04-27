@@ -85,6 +85,5 @@ function merge(db, remoteTx, transaction) {
   if (localTx > remoteTx) return db
   if (localTx === remoteTx && cid > remoteCid) return db
 
-  console.log('must be you!')
   return update(db, e, a, v, remoteTx, op, remoteCid)
 }

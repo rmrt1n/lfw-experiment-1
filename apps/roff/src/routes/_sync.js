@@ -1,9 +1,9 @@
 import { defineWebSocket, eventHandler } from "vinxi/http";
 
 // TODO: persist this on disk
-const cids = []
-const cidToPeer = {}
-const log = {}
+let cids = []
+let cidToPeer = {}
+let log = {}
 
 export default eventHandler({
   handler: () => { },
@@ -29,7 +29,7 @@ export default eventHandler({
           }
           cidToPeer[data.body.cid] = peer
           // send unmerged transactions
-          console.log(log)
+          // TODO: don't send txs from peer (cid === peer.cid)
           peer.send(JSON.stringify({
             ok: true,
             message: 'cid registered',
@@ -70,6 +70,9 @@ export default eventHandler({
           break
         case 'debug':
           console.log(log)
+          cids = []
+          cidToPeer = {}
+          log = {}
           break
         default:
           peer.send(JSON.stringify({ ok: false, message: 'unknown action' }))
