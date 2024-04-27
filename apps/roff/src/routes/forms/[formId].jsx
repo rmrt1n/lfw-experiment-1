@@ -5,15 +5,36 @@ import { Button, button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
 import { Plus } from "~/components/ui/icons"
 import { FormCover } from "~/components/form-cover"
+import { QuestionCard } from "~/components/question-card"
 
 export default function Form() {
   const { formId } = useParams()
   const [form, setForm] = createSignal({})
+  const [questions, setQuestions] = createSignal([])
   const db = useFrain()
 
   // TODO: handle 404 if form is undefined
+  // TODO: better abstraction for joins
   createEffect(() => {
     setForm(db.from('forms').find(formId))
+    const res = db.q()
+      .find(['?qid', '?question', '?desc', '?type', '?required', '?prev', '?oid', '?option'])
+      .where([
+        ['?qid', 'questions/form', formId],
+        ['?qid', 'questions/question', '?question'],
+        ['?qid', 'questions/desc', '?desc'],
+        ['?qid', 'questions/type', '?type'],
+        ['?qid', 'questions/required', '?required'],
+        ['?qid', 'questions/prev', '?prev'],
+        ['?oid', 'options/question', '?qid'],
+        ['?oid', 'options/option', '?option'],
+      ]).reduce((acc, [id, question, desc, type, required, prev, oid, option]) => ({
+        ...acc,
+        [id]: acc[id]
+          ? { ...acc[id], options: [...acc[id].options, { id: oid, option }] }
+          : { id, question, desc, type, required, prev, options: [{ id: oid, option }] }
+      }), {})
+    setQuestions(Object.keys(res).map((id) => res[id]))
   })
 
   const handleUpdateName = (e) => {
@@ -24,6 +45,22 @@ export default function Form() {
     db.from('forms').update(formId, { status: 'published' })
     const fullPath = window.location.href.split('/forms')[0]
     alert(`Your form is now public at: ${fullPath}/f/${formId}`)
+  }
+
+  const handleNewQuestion = () => {
+    const id = db.from('questions').insert({
+      question: '',
+      desc: '',
+      type: 'text',
+      required: true,
+      // store the id of the previous question (linked list model to keep questions ordered)
+      prev: questions().length === 0
+        ? null
+        : questions()[questions().length - 1].id,
+      form: formId,
+    })
+    // insert a "dummy" option because the query engine doesn't support "OR" yet
+    db.from('options').insert({ question: id, option: 'Option 1' })
   }
 
   return (
@@ -52,7 +89,16 @@ export default function Form() {
       </div>
       <div class="space-y-4">
         <FormCover form={form} />
-        <Button>
+        <For each={questions()}>
+          {(q, i) => (
+            <QuestionCard
+              i={i() + 1}
+              question={q}
+              next={questions()[i() + 1]}
+            />
+          )}
+        </For>
+        <Button onClick={handleNewQuestion}>
           <Plus />
           New question
         </Button>
