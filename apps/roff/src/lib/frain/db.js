@@ -3,16 +3,19 @@ import { id } from './utils'
 export function createTransactor(db, setDb, ns) {
   return {
     find: (id) => {
+      if (!db().eavt[id]) return {}
       return {
         id,
         ...Object.keys(db().eavt[id]).reduce((acc, a) => ({ ...acc, [a.split('/')[1]]: db().eavt[id][a] }), {})
       }
     },
     findAll: () => {
-      return Object.keys(db().eavt).map((e) => ({
-        id: e,
-        ...Object.keys(db().eavt[e]).reduce((acc, a) => ({ ...acc, [a.split('/')[1]]: db().eavt[e][a] }), {})
-      }))
+      return Object.keys(db().eavt)
+        .filter((e) => Object.keys(db().eavt[e]).filter((a) => a.startsWith(ns)).length > 0)
+        .map((e) => ({
+          id: e,
+          ...Object.keys(db().eavt[e]).reduce((acc, a) => ({ ...acc, [a.split('/')[1]]: db().eavt[e][a] }), {})
+        }))
     },
     insert: (kvs) => {
       const newId = id()
@@ -20,7 +23,7 @@ export function createTransactor(db, setDb, ns) {
       return newId
     },
     update: (id, kvs) => setDb(batchUpdate(db(), ns, id, kvs)),
-    // delete
+    delete: (id) => setDb(batchDelete(db(), id))
   }
 }
 
@@ -34,17 +37,34 @@ function batchUpdate(db, ns, id, kvs) {
 }
 
 function update(db, e, a, v, tx, op, cid) {
+  const { [e]: avs, ...newEAVT } = db.eavt
   return {
     ...db,
-    eavt: { ...db.eavt, [e]: { ...db.eavt[e], [a]: v } },
-    aevt: { ...db.aevt, [a]: { ...db.aevt[a], [e]: v } },
+    eavt: op
+      ? { ...db.eavt, [e]: { ...db.eavt[e], [a]: v } }
+      : newEAVT,
+    aevt: op
+      ? { ...db.aevt, [a]: { ...db.aevt[a], [e]: v } }
+      : Object.fromEntries(Object.entries(db.aevt).map(([a, evs]) => {
+        const { [e]: _, ...newEVS } = evs
+        return [a, newEVS]
+      })),
     maxTx: tx,
     storage: { ...db.storage, [e]: { ...db.storage[e], [a]: { value: v, tx, op, cid } } },
   }
 }
 
+// deletes an entire entity
+function batchDelete(db, e) {
+  const nextTx = db.maxTx + 1
+  const { [e]: avs, ..._ } = db.eavt
+  return {
+    ...Object.keys(db.storage[e]).reduce((acc, a) => update(acc, e, a, db.storage[e][a].value, nextTx, false, db.cid), db),
+    log: { ...db.log, [nextTx]: [...(db.log[nextTx] ?? []), ...Object.keys(avs).map((a) => [e, a, avs[a], false, db.cid])] }
+  }
+}
+
 export function batchMerge(db, transactions) {
-  console.log(transactions)
   if (!transactions || Object.keys(transactions).length === 0) return db
   const remoteMaxTx = Object.keys(transactions).toSorted(Math.min)[0]
   return {
@@ -54,7 +74,6 @@ export function batchMerge(db, transactions) {
 }
 
 function merge(db, remoteTx, transaction) {
-  console.log('test', transaction)
   const [e, a, v, op, remoteCid] = transaction
 
   // if eav isn't in local, then it's an insert so just update the db 
@@ -66,5 +85,6 @@ function merge(db, remoteTx, transaction) {
   if (localTx > remoteTx) return db
   if (localTx === remoteTx && cid > remoteCid) return db
 
+  console.log('must be you!')
   return update(db, e, a, v, remoteTx, op, remoteCid)
 }

@@ -34,6 +34,7 @@ function querySingle(db, pattern, ctx) {
     }).filter((x) => x)
   }
   if (!isVariable(a)) {
+    if (!db.aevt[a]) return []
     return Object.keys(db.aevt[a]).map((e) => {
       const triple = [e, a, db.aevt[a][e]]
       return matchPattern(pattern, triple, ctx)
