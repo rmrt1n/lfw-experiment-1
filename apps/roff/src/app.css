@@ -6,3 +6,10 @@ html {
   font-family: Inter, sans-serif;
   font-size: 0.875rem;
 }
+
+:where(input[type="checkbox"]) {
+  @supports (-webkit-appearance: none) or (-moz-appearance: none) {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+  }
+}
