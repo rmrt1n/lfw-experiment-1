@@ -5,13 +5,20 @@ import { useFrain } from '~/lib/frain-provider'
 import { Button, button } from "~/components/ui/button"
 import { Plus } from "~/components/ui/icons"
 import { Card } from "~/components/ui/card"
+import { useWallet } from "~/lib/wallet-provider"
 
 export default function Forms() {
   const navigate = useNavigate()
+  const { isConnected } = useWallet()
   const [forms, setForms] = createSignal([])
   const db = useFrain()
 
+  // TODO: make sign in use cookie based auth
   createEffect(() => {
+    if (!isConnected()) {
+      navigate('/')
+      return
+    }
     setForms(db.from('forms').findAll())
   })
 
