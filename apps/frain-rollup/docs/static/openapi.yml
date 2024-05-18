@@ -9195,6 +9195,42 @@ paths:
               Since: cosmos-sdk 0.47
       tags:
         - Msg
+  /frain-rollup/frainrollup/params:
+    get:
+      summary: Parameters queries the parameters of the module.
+      operationId: FrainrollupFrainrollupQuery_Params
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              params:
+                description: params holds all the parameters of this module.
+                type: object
+            description: >-
+              QueryParamsResponse is response type for the Query/Params RPC
+              method.
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
   /frainrollup.frainrollup.Msg/UpdateParams:
     post:
       summary: |-
@@ -9251,42 +9287,6 @@ paths:
             description: MsgUpdateParams is the Msg/UpdateParams request type.
       tags:
         - Msg
-  /frain-rollup/frainrollup/params:
-    get:
-      summary: Parameters queries the parameters of the module.
-      operationId: FrainrollupFrainrollupQuery_Params
-      responses:
-        '200':
-          description: A successful response.
-          schema:
-            type: object
-            properties:
-              params:
-                description: params holds all the parameters of this module.
-                type: object
-            description: >-
-              QueryParamsResponse is response type for the Query/Params RPC
-              method.
-        default:
-          description: An unexpected error response.
-          schema:
-            type: object
-            properties:
-              code:
-                type: integer
-                format: int32
-              message:
-                type: string
-              details:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    '@type':
-                      type: string
-                  additionalProperties: {}
-      tags:
-        - Query
   /ibc.applications.fee.v1.Msg/PayPacketFee:
     post:
       summary: >-
@@ -20042,6 +20042,16 @@ definitions:
           min_commission_rate is the chain-wide minimum commission rate that a
           validator can charge their delegators
     description: Params defines the parameters for the x/staking module.
+  frainrollup.frainrollup.Params:
+    type: object
+    description: Params defines the parameters for the module.
+  frainrollup.frainrollup.QueryParamsResponse:
+    type: object
+    properties:
+      params:
+        description: params holds all the parameters of this module.
+        type: object
+    description: QueryParamsResponse is response type for the Query/Params RPC method.
   frainrollup.frainrollup.MsgUpdateParams:
     type: object
     properties:
@@ -20062,16 +20072,6 @@ definitions:
     description: |-
       MsgUpdateParamsResponse defines the response structure for executing a
       MsgUpdateParams message.
-  frainrollup.frainrollup.Params:
-    type: object
-    description: Params defines the parameters for the module.
-  frainrollup.frainrollup.QueryParamsResponse:
-    type: object
-    properties:
-      params:
-        description: params holds all the parameters of this module.
-        type: object
-    description: QueryParamsResponse is response type for the Query/Params RPC method.
   ibc.applications.fee.v1.Fee:
     type: object
     properties:

@@ -1,0 +1,14 @@
+syntax = "proto3";
+package frainrollup.frainrollup;
+
+option go_package = "frain-rollup/x/frainrollup/types";
+
+message Frainsaction {
+  
+  string e = 1; 
+  string a = 2; 
+  string v = 3; 
+  string tx = 4; 
+  string op = 5; 
+  string cid = 6; 
+}

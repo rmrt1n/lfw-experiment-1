@@ -16,6 +16,7 @@ export function Header() {
     db.setIsOnline(!db.isOnline())
     setIsOfflineDropdownOpen(false)
   }
+  console.log('the fuck', isConnected())
 
   return (
     <header>
